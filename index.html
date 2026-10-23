@@ -146,7 +146,7 @@ scene.add(pts);
 const shoe = new THREE.Group(); scene.add(shoe);
 let shoeMat = null, shoeReady=false;
 
-new GLTFLoader().load('shoe.glb', (gltf)=>{
+new GLTFLoader().load('https://h.uguu.se/QmxyBiOF.glb', (gltf)=>{
   const obj = gltf.scene;
   const box = new THREE.Box3().setFromObject(obj);
   const size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
