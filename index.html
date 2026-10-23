@@ -146,7 +146,14 @@ scene.add(pts);
 const shoe = new THREE.Group(); scene.add(shoe);
 let shoeMat = null, shoeReady=false;
 
-new GLTFLoader().load('https://h.uguu.se/QmxyBiOF.glb', (gltf)=>{
+function b64ToBlobUrl(b64){
+  const bin = atob(b64), len = bin.length, bytes = new Uint8Array(len);
+  for(let i=0;i<len;i++) bytes[i]=bin.charCodeAt(i);
+  return URL.createObjectURL(new Blob([bytes],{type:'model/gltf-binary'}));
+}
+fetch('shoe.glb.b64').then(r=>{ if(!r.ok) throw 0; return r.text(); })
+.then(b64=>new Promise((res,rej)=>new GLTFLoader().load(b64ToBlobUrl(b64),res,undefined,rej)))
+.then((gltf)=>{
   const obj = gltf.scene;
   const box = new THREE.Box3().setFromObject(obj);
   const size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
@@ -160,7 +167,7 @@ new GLTFLoader().load('https://h.uguu.se/QmxyBiOF.glb', (gltf)=>{
   shoe.rotation.y = -.7;
   loaderEl.classList.add('done');
   ScrollTrigger.refresh();
-}, undefined, ()=>{
+}).catch(()=>{
   document.getElementById('fallback').style.display='flex'; loaderEl.classList.add('done');
 });
 
